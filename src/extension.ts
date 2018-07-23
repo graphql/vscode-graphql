@@ -5,7 +5,14 @@ import {
   ExtensionContext,
   window,
   commands,
-  OutputChannel
+  OutputChannel,
+  languages,
+  CodeLensProvider,
+  TextDocument,
+  CancellationToken,
+  CodeLens,
+  Range,
+  Position
 } from "vscode";
 import {
   LanguageClient,
@@ -16,6 +23,9 @@ import {
 
 import statusBarItem, { initStatusBar } from "./status";
 
+import { parse, OperationDefinitionNode } from "graphql";
+import * as capitalize from "capitalize";
+
 function getConfig() {
   return workspace.getConfiguration(
     "vscode-graphql",
@@ -23,7 +33,7 @@ function getConfig() {
   );
 }
 
-export function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext) {
   let outputChannel: OutputChannel = window.createOutputChannel(
     "GraphQL Language Server"
   );
@@ -83,6 +93,92 @@ export function activate(context: ExtensionContext) {
   client.onReady().then(() => {
     initStatusBar(statusBarItem, client, window.activeTextEditor);
   });
+
+  context.subscriptions.push(
+    languages.registerCodeLensProvider(
+      ["javascript", "typescript", "javascriptreact", "typescriptreact"],
+      new GraphQLCodeLensProvider(outputChannel)
+    )
+  );
+}
+
+interface ExtractedTemplateLiteral {
+  content: string;
+  uri: string;
+  position: Position;
+}
+
+function extractAllTemplateLiterals(
+  document: TextDocument,
+  tags: string[] = ["gql"]
+): ExtractedTemplateLiteral[] {
+  const text = document.getText();
+  const documents: any[] = [];
+
+  tags.forEach(tag => {
+    const regExp = new RegExp(tag + "\\s*`([\\s\\S]+?)`", "mg");
+
+    let result;
+    while ((result = regExp.exec(text)) !== null) {
+      const contents = substituteTemplateVariables(result[1]);
+      const position = document.positionAt(result.index + 4);
+      documents.push({
+        content: contents,
+        uri: document.uri.path,
+        position: position
+      });
+    }
+  });
+
+  return documents;
+}
+
+function substituteTemplateVariables(content: string) {
+  return content.replace(/\$\{(.+)?\}/g, match => {
+    return Array(match.length).join(" ");
+  });
+}
+
+class GraphQLCodeLensProvider implements CodeLensProvider {
+  outputChannel: OutputChannel;
+  parser: any;
+
+  constructor(outputChannel: OutputChannel) {
+    this.outputChannel = outputChannel;
+  }
+
+  public provideCodeLenses(
+    document: TextDocument,
+    token: CancellationToken
+  ): CodeLens[] | Thenable<CodeLens[]> {
+    const literals = extractAllTemplateLiterals(document, ["gql", "graphql"]);
+    return literals
+      .filter(literal => {
+        try {
+          parse(literal.content);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      })
+      .map(literal => {
+        const ast = parse(literal.content);
+
+        return new CodeLens(
+          new Range(
+            new Position(literal.position.line, 0),
+            new Position(literal.position.line, 0)
+          ),
+          {
+            title: `Execute ${capitalize(
+              (ast.definitions[0] as OperationDefinitionNode).operation
+            )}`,
+            command: "extension.isDebugging",
+            arguments: [literal.content]
+          }
+        );
+      });
+  }
 }
 
 export function deactivate() {
