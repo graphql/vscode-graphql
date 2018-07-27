@@ -17,13 +17,13 @@ export function extractAllTemplateLiterals(
 
   tags.forEach(tag => {
     // https://regex101.com/r/Pd5PaU/2
-    const regExp = new RegExp(tag + "\\s*`([\\s\\S]+?)`", "mg");
+    const regExpGQL = new RegExp(tag + "\\s*`([\\s\\S]+?)`", "mg");
 
     let result;
-    while ((result = regExp.exec(text)) !== null) {
+    while ((result = regExpGQL.exec(text)) !== null) {
       const contents = result[1];
 
-      // https://regex101.com/r/KFMXFg/1
+      // https://regex101.com/r/KFMXFg/2
       if (Boolean(contents.match("/${(.+)?}/g"))) {
         // We are ignoring operations with template variables for now
         continue;
