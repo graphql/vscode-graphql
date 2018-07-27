@@ -13,7 +13,8 @@ import { ExtractedTemplateLiteral } from "./source-helper";
 import {
   GraphQLConfig,
   getGraphQLConfig,
-  GraphQLProjectConfig
+  GraphQLProjectConfig,
+  GraphQLEndpoint
 } from "graphql-config";
 import { visit, VariableDefinitionNode } from "graphql";
 import { executeOperation } from "./network-helper";
@@ -96,12 +97,23 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
         const endpointNames = Object.keys(
           projectConfig!.endpointsExtension!.getRawEndpointsMap()
         );
+
+        if (endpointNames.length === 0) {
+          this.outputChannel.appendLine(
+            `Error: endpoint data missing from graphql config endpoints extension`
+          );
+          this.html =
+            "Error: endpoint data missing from graphql config endpoints extension";
+          this.update(this.uri);
+          return;
+        }
+
+        // TODO: Can ask user for the endpoint if muliple exist
+        // Endpoints extensions docs say that at least "default" will be there
         const endpointName = endpointNames[0];
         const endpoint = projectConfig!.endpointsExtension!.getEndpoint(
           endpointName
         );
-        const endpointURL =
-          typeof endpoint === "object" ? endpoint.url : endpoint;
 
         let variableDefinitionNodes: VariableDefinitionNode[] = [];
         visit(literal.ast, {
@@ -123,7 +135,7 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
           getVariablesFromUser(variableDefinitionNodes).then(
             (variables: any) => {
               executeOperation({
-                endpoint: endpointURL,
+                endpoint: endpoint,
                 literal: literal,
                 variables: variables,
                 updateCallback
@@ -132,7 +144,7 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
           );
         } else {
           executeOperation({
-            endpoint: endpointURL,
+            endpoint: endpoint,
             literal: literal,
             variables: {},
             updateCallback

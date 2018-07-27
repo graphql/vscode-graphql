@@ -8,15 +8,15 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import * as ws from "ws";
 
 import { HTTPLinkDataloader } from "http-link-dataloader";
+import { GraphQLEndpoint } from "graphql-config";
 
 export interface ExecuteOperationOptions {
-  endpoint: string;
+  endpoint: GraphQLEndpoint;
   literal: ExtractedTemplateLiteral;
   variables: { [key: string]: string };
   updateCallback: (data: string, operation: string) => void;
 }
 
-// TODO Handle endpoint authentication
 export function executeOperation({
   endpoint,
   literal,
@@ -27,10 +27,11 @@ export function executeOperation({
     .operation;
 
   const httpLink = new HTTPLinkDataloader({
-    uri: endpoint
+    uri: endpoint.url,
+    headers: endpoint.headers
   });
 
-  const wsEndpointURL = endpoint.replace(/^http/, "ws");
+  const wsEndpointURL = endpoint.url.replace(/^http/, "ws");
   const wsLink = new WebSocketLink({
     uri: wsEndpointURL,
     options: {
@@ -57,18 +58,8 @@ export function executeOperation({
         variables
       })
       .subscribe({
-        next({ data, errors }: any) {
-          updateCallback(
-            JSON.stringify(
-              {
-                data,
-                errors
-              },
-              null,
-              2
-            ),
-            operation
-          );
+        next(data: any) {
+          updateCallback(formatData(data), operation);
         }
       });
   } else {
@@ -78,18 +69,8 @@ export function executeOperation({
           query: parsedOperation,
           variables
         })
-        .then(({ data, errors }) => {
-          updateCallback(
-            JSON.stringify(
-              {
-                data,
-                errors
-              },
-              null,
-              2
-            ),
-            operation
-          );
+        .then((data: any) => {
+          updateCallback(formatData(data), operation);
         });
     } else {
       apolloClient
@@ -97,9 +78,13 @@ export function executeOperation({
           mutation: parsedOperation,
           variables
         })
-        .then(({ data, errors }) => {
-          updateCallback(JSON.stringify({ data, errors }, null, 2), operation);
+        .then((data: any) => {
+          updateCallback(formatData(data), operation);
         });
     }
   }
+}
+
+function formatData({ data, errors }: any) {
+  return JSON.stringify({ data, errors }, null, 2);
 }

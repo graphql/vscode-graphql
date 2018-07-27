@@ -16,11 +16,19 @@ export function extractAllTemplateLiterals(
   const documents: any[] = [];
 
   tags.forEach(tag => {
+    // https://regex101.com/r/Pd5PaU/2
     const regExp = new RegExp(tag + "\\s*`([\\s\\S]+?)`", "mg");
 
     let result;
     while ((result = regExp.exec(text)) !== null) {
-      const contents = substituteTemplateVariables(result[1]);
+      const contents = result[1];
+
+      // https://regex101.com/r/KFMXFg/1
+      if (Boolean(contents.match("/${(.+)?}/g"))) {
+        // We are ignoring operations with template variables for now
+        continue;
+      }
+
       let isLiteralParsableGraphQL = true;
       let ast = null;
       try {
@@ -41,10 +49,4 @@ export function extractAllTemplateLiterals(
   });
 
   return documents;
-}
-
-function substituteTemplateVariables(content: string) {
-  return content.replace(/\$\{(.+)?\}/g, match => {
-    return Array(match.length).join(" ");
-  });
 }
