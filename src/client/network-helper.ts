@@ -41,7 +41,9 @@ export function executeOperation({
 
   const apolloClient = new ApolloClient({
     link: operation === "subscription" ? wsLink : httpLink,
-    cache: new InMemoryCache()
+    cache: new InMemoryCache({
+      addTypename: false
+    })
   });
 
   const parsedOperation = gql`
@@ -55,8 +57,18 @@ export function executeOperation({
         variables
       })
       .subscribe({
-        next(data: {}) {
-          updateCallback(JSON.stringify(data, null, 2), operation);
+        next({ data, errors }: any) {
+          updateCallback(
+            JSON.stringify(
+              {
+                data,
+                errors
+              },
+              null,
+              2
+            ),
+            operation
+          );
         }
       });
   } else {
@@ -66,8 +78,18 @@ export function executeOperation({
           query: parsedOperation,
           variables
         })
-        .then(data => {
-          updateCallback(JSON.stringify(data, null, 2), operation);
+        .then(({ data, errors }) => {
+          updateCallback(
+            JSON.stringify(
+              {
+                data,
+                errors
+              },
+              null,
+              2
+            ),
+            operation
+          );
         });
     } else {
       apolloClient
@@ -75,8 +97,8 @@ export function executeOperation({
           mutation: parsedOperation,
           variables
         })
-        .then(data => {
-          updateCallback(JSON.stringify(data, null, 2), operation);
+        .then(({ data, errors }) => {
+          updateCallback(JSON.stringify({ data, errors }, null, 2), operation);
         });
     }
   }
