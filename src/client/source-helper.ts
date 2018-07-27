@@ -1,0 +1,50 @@
+import { TextDocument, Position } from "vscode";
+import { parse, DocumentNode } from "graphql";
+
+export interface ExtractedTemplateLiteral {
+  content: string;
+  uri: string;
+  position: Position;
+  ast: DocumentNode;
+}
+
+export function extractAllTemplateLiterals(
+  document: TextDocument,
+  tags: string[] = ["gql"]
+): ExtractedTemplateLiteral[] {
+  const text = document.getText();
+  const documents: any[] = [];
+
+  tags.forEach(tag => {
+    const regExp = new RegExp(tag + "\\s*`([\\s\\S]+?)`", "mg");
+
+    let result;
+    while ((result = regExp.exec(text)) !== null) {
+      const contents = substituteTemplateVariables(result[1]);
+      let isLiteralParsableGraphQL = true;
+      let ast = null;
+      try {
+        ast = parse(contents);
+      } catch (e) {
+        isLiteralParsableGraphQL = false;
+      }
+      const position = document.positionAt(result.index + 4);
+      if (isLiteralParsableGraphQL) {
+        documents.push({
+          content: contents,
+          uri: document.uri.path,
+          position: position,
+          ast: ast
+        });
+      }
+    }
+  });
+
+  return documents;
+}
+
+function substituteTemplateVariables(content: string) {
+  return content.replace(/\$\{(.+)?\}/g, match => {
+    return Array(match.length).join(" ");
+  });
+}
