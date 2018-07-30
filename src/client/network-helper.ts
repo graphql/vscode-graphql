@@ -35,7 +35,8 @@ export function executeOperation({
   const wsLink = new WebSocketLink({
     uri: wsEndpointURL,
     options: {
-      reconnect: true
+      reconnect: true,
+      inactivityTimeout: 30000
     },
     webSocketImpl: ws
   });

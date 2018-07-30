@@ -29,15 +29,19 @@ export function extractAllTemplateLiterals(
         continue;
       }
 
-      let isLiteralParsableGraphQL = true;
+      let isLiteralParsableGraphQLOperation = true;
       let ast: DocumentNode | null = null;
       try {
         ast = parse(contents);
+        const isOperation = ast.definitions.some(
+          definition => definition.kind === "OperationDefinition"
+        );
+        isLiteralParsableGraphQLOperation = isOperation ? true : false;
       } catch (e) {
-        isLiteralParsableGraphQL = false;
+        isLiteralParsableGraphQLOperation = false;
       }
       const position = document.positionAt(result.index + 4);
-      if (isLiteralParsableGraphQL) {
+      if (isLiteralParsableGraphQLOperation) {
         documents.push({
           content: contents,
           uri: document.uri.path,
