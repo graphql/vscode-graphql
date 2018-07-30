@@ -13,8 +13,7 @@ import { ExtractedTemplateLiteral } from "./source-helper";
 import {
   GraphQLConfig,
   getGraphQLConfig,
-  GraphQLProjectConfig,
-  GraphQLEndpoint
+  GraphQLProjectConfig
 } from "graphql-config";
 import { visit, VariableDefinitionNode } from "graphql";
 import { executeOperation } from "./network-helper";

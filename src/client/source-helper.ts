@@ -30,7 +30,7 @@ export function extractAllTemplateLiterals(
       }
 
       let isLiteralParsableGraphQL = true;
-      let ast = null;
+      let ast: DocumentNode | null = null;
       try {
         ast = parse(contents);
       } catch (e) {
@@ -42,7 +42,7 @@ export function extractAllTemplateLiterals(
           content: contents,
           uri: document.uri.path,
           position: position,
-          ast: ast
+          ast
         });
       }
     }

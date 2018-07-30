@@ -20,7 +20,7 @@
   "version": "0.1.0",
   "publisher": "Prisma",
   "engines": {
-    "vscode": "^1.23.1"
+    "vscode": "^1.25.0"
   },
   "categories": [
     "Programming Languages",
@@ -134,8 +134,8 @@
     "vscode": "^1.1.6"
   },
   "dependencies": {
-    "@divyenduz/graphql-language-service-server": "1.2.3",
-    "@divyenduz/ts-graphql-plugin": "0.0.9",
+    "@divyenduz/graphql-language-service-server": "1.2.6",
+    "@divyenduz/ts-graphql-plugin": "0.1.0",
     "apollo-cache-inmemory": "^1.2.6",
     "apollo-client": "^2.3.7",
     "apollo-link-ws": "^1.0.8",
