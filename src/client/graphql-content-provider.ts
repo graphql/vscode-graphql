@@ -16,32 +16,40 @@ import {
   GraphQLProjectConfig
 } from "graphql-config";
 import { visit, VariableDefinitionNode } from "graphql";
-import { executeOperation } from "./network-helper";
-
-async function getVariablesFromUser(
-  variableDefinitionNodes: VariableDefinitionNode[]
-): Promise<{ [key: string]: string | undefined }> {
-  let variables = {};
-  for (let node of variableDefinitionNodes) {
-    variables = {
-      ...variables,
-      [`${node.variable.name.value}`]: await window.showInputBox({
-        ignoreFocusOut: true,
-        placeHolder: `Please enter the value for ${node.variable.name.value}`
-      })
-    };
-  }
-  return variables;
-}
+import { NetworkHelper } from "./network-helper";
+import { SourceHelper, GraphQLScalarTSType } from "./source-helper";
 
 export class GraphQLContentProvider implements TextDocumentContentProvider {
   private uri: Uri;
   private outputChannel: OutputChannel;
+  private networkHelper: NetworkHelper;
+  private sourceHelper: SourceHelper;
 
   // Event emitter which invokes document updates
   private _onDidChange = new EventEmitter<Uri>();
 
   private html: string = ""; // HTML document buffer
+
+  async getVariablesFromUser(
+    variableDefinitionNodes: VariableDefinitionNode[]
+  ): Promise<{ [key: string]: GraphQLScalarTSType }> {
+    let variables = {};
+    for (let node of variableDefinitionNodes) {
+      variables = {
+        ...variables,
+        [`${node.variable.name.value}`]: this.sourceHelper.typeCast(
+          await window.showInputBox({
+            ignoreFocusOut: true,
+            placeHolder: `Please enter the value for ${
+              node.variable.name.value
+            }`
+          }),
+          this.sourceHelper.getTypeForVariableDefinitionNode(node)
+        )
+      };
+    }
+    return variables;
+  }
 
   /*
     Use the configration of first project if heuristics failed 
@@ -65,6 +73,8 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
   ) {
     this.uri = uri;
     this.outputChannel = outputChannel;
+    this.networkHelper = new NetworkHelper(this.outputChannel);
+    this.sourceHelper = new SourceHelper();
 
     try {
       const rootDir = workspace.getWorkspaceFolder(Uri.file(literal.uri));
@@ -131,9 +141,9 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
         };
 
         if (variableDefinitionNodes.length > 0) {
-          getVariablesFromUser(variableDefinitionNodes).then(
+          this.getVariablesFromUser(variableDefinitionNodes).then(
             (variables: any) => {
-              executeOperation({
+              this.networkHelper.executeOperation({
                 endpoint: endpoint,
                 literal: literal,
                 variables: variables,
@@ -142,7 +152,7 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
             }
           );
         } else {
-          executeOperation({
+          this.networkHelper.executeOperation({
             endpoint: endpoint,
             literal: literal,
             variables: {},

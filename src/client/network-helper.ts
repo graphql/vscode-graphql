@@ -9,81 +9,94 @@ import * as ws from "ws";
 
 import { HTTPLinkDataloader } from "http-link-dataloader";
 import { GraphQLEndpoint } from "graphql-config";
+import { OutputChannel } from "vscode";
+
+export class NetworkHelper {
+  private outputChannel: OutputChannel;
+
+  constructor(outputChannel: OutputChannel) {
+    this.outputChannel = outputChannel;
+  }
+
+  executeOperation({
+    endpoint,
+    literal,
+    variables,
+    updateCallback
+  }: ExecuteOperationOptions) {
+    const operation = (literal.ast.definitions[0] as OperationDefinitionNode)
+      .operation;
+    this.outputChannel.appendLine(`NetworkHelper: operation: ${operation}`);
+
+    const httpLink = new HTTPLinkDataloader({
+      uri: endpoint.url,
+      headers: endpoint.headers
+    });
+
+    const wsEndpointURL = endpoint.url.replace(/^http/, "ws");
+    const wsLink = new WebSocketLink({
+      uri: wsEndpointURL,
+      options: {
+        reconnect: true,
+        inactivityTimeout: 30000
+      },
+      webSocketImpl: ws
+    });
+
+    const apolloClient = new ApolloClient({
+      link: operation === "subscription" ? wsLink : httpLink,
+      cache: new InMemoryCache({
+        addTypename: false
+      })
+    });
+
+    const parsedOperation = gql`
+      ${literal.content}
+    `;
+
+    if (operation === "subscription") {
+      apolloClient
+        .subscribe({
+          query: parsedOperation,
+          variables
+        })
+        .subscribe({
+          next(data: any) {
+            updateCallback(formatData(data), operation);
+          }
+        });
+    } else {
+      if (operation === "query") {
+        apolloClient
+          .query({
+            query: parsedOperation,
+            variables
+          })
+          .then((data: any) => {
+            updateCallback(formatData(data), operation);
+          })
+          .catch(err => {
+            updateCallback(err.toString(), operation);
+          });
+      } else {
+        apolloClient
+          .mutate({
+            mutation: parsedOperation,
+            variables
+          })
+          .then((data: any) => {
+            updateCallback(formatData(data), operation);
+          });
+      }
+    }
+  }
+}
 
 export interface ExecuteOperationOptions {
   endpoint: GraphQLEndpoint;
   literal: ExtractedTemplateLiteral;
   variables: { [key: string]: string };
   updateCallback: (data: string, operation: string) => void;
-}
-
-export function executeOperation({
-  endpoint,
-  literal,
-  variables,
-  updateCallback
-}: ExecuteOperationOptions) {
-  const operation = (literal.ast.definitions[0] as OperationDefinitionNode)
-    .operation;
-
-  const httpLink = new HTTPLinkDataloader({
-    uri: endpoint.url,
-    headers: endpoint.headers
-  });
-
-  const wsEndpointURL = endpoint.url.replace(/^http/, "ws");
-  const wsLink = new WebSocketLink({
-    uri: wsEndpointURL,
-    options: {
-      reconnect: true,
-      inactivityTimeout: 30000
-    },
-    webSocketImpl: ws
-  });
-
-  const apolloClient = new ApolloClient({
-    link: operation === "subscription" ? wsLink : httpLink,
-    cache: new InMemoryCache({
-      addTypename: false
-    })
-  });
-
-  const parsedOperation = gql`
-    ${literal.content}
-  `;
-
-  if (operation === "subscription") {
-    apolloClient
-      .subscribe({
-        query: parsedOperation,
-        variables
-      })
-      .subscribe({
-        next(data: any) {
-          updateCallback(formatData(data), operation);
-        }
-      });
-  } else {
-    if (operation === "query") {
-      apolloClient
-        .query({
-          query: parsedOperation,
-          variables
-        })
-        .then((data: any) => {
-          updateCallback(formatData(data), operation);
-        });
-    } else {
-      apolloClient
-        .mutate({
-          mutation: parsedOperation,
-          variables
-        })
-        .then((data: any) => {
-          updateCallback(formatData(data), operation);
-        });
-    }
-  }
 }
 
 function formatData({ data, errors }: any) {

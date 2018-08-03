@@ -8,25 +8,24 @@ import {
   Position
 } from "vscode";
 
-import {
-  extractAllTemplateLiterals,
-  ExtractedTemplateLiteral
-} from "./source-helper";
+import { SourceHelper, ExtractedTemplateLiteral } from "./source-helper";
 import { OperationDefinitionNode } from "graphql";
 import * as capitalize from "capitalize";
 
 export class GraphQLCodeLensProvider implements CodeLensProvider {
   outputChannel: OutputChannel;
+  sourceHelper: SourceHelper;
 
   constructor(outputChannel: OutputChannel) {
     this.outputChannel = outputChannel;
+    this.sourceHelper = new SourceHelper();
   }
 
   public provideCodeLenses(
     document: TextDocument,
     token: CancellationToken
   ): CodeLens[] | Thenable<CodeLens[]> {
-    const literals: ExtractedTemplateLiteral[] = extractAllTemplateLiterals(
+    const literals: ExtractedTemplateLiteral[] = this.sourceHelper.extractAllTemplateLiterals(
       document,
       ["gql", "graphql"]
     );
