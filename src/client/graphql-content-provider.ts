@@ -74,7 +74,7 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
     this.uri = uri;
     this.outputChannel = outputChannel;
     this.networkHelper = new NetworkHelper(this.outputChannel);
-    this.sourceHelper = new SourceHelper();
+    this.sourceHelper = new SourceHelper(this.outputChannel);
 
     try {
       const rootDir = workspace.getWorkspaceFolder(Uri.file(literal.uri));

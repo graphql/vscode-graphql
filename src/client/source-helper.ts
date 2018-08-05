@@ -1,4 +1,4 @@
-import { TextDocument, Position } from "vscode";
+import { TextDocument, Position, OutputChannel } from "vscode";
 import {
   visit,
   parse,
@@ -8,6 +8,12 @@ import {
 } from "graphql";
 
 export class SourceHelper {
+  private outputChannel: OutputChannel;
+
+  constructor(outputChannel: OutputChannel) {
+    this.outputChannel = outputChannel;
+  }
+
   getTypeForVariableDefinitionNode(
     node: VariableDefinitionNode
   ): GraphQLScalarType {
@@ -36,7 +42,19 @@ export class SourceHelper {
     if (type === "Boolean") {
       return Boolean(value);
     }
-    return value;
+    if (type === "String") {
+      return value;
+    }
+
+    // Object type
+    try {
+      return JSON.parse(value);
+    } catch {
+      this.outputChannel.appendLine(
+        `Failed to parse user input as JSON, please use double quotes.`
+      );
+      return value;
+    }
   }
 
   extractAllTemplateLiterals(
@@ -87,7 +105,7 @@ export class SourceHelper {
   }
 }
 
-export type GraphQLScalarType = "String" | "Float" | "Int" | "Boolean";
+export type GraphQLScalarType = "String" | "Float" | "Int" | "Boolean" | string;
 export type GraphQLScalarTSType = string | number | boolean;
 
 export interface ExtractedTemplateLiteral {
