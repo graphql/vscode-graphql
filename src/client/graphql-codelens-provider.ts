@@ -18,7 +18,7 @@ export class GraphQLCodeLensProvider implements CodeLensProvider {
 
   constructor(outputChannel: OutputChannel) {
     this.outputChannel = outputChannel;
-    this.sourceHelper = new SourceHelper();
+    this.sourceHelper = new SourceHelper(this.outputChannel);
   }
 
   public provideCodeLenses(
