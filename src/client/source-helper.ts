@@ -4,7 +4,8 @@ import {
   parse,
   DocumentNode,
   VariableDefinitionNode,
-  NamedTypeNode
+  NamedTypeNode,
+  ListTypeNode
 } from "graphql";
 
 export class SourceHelper {
@@ -18,11 +19,19 @@ export class SourceHelper {
     node: VariableDefinitionNode
   ): GraphQLScalarType {
     let namedTypeNode: NamedTypeNode | null = null;
+    let isList = false;
     visit(node, {
+      ListType(node: ListTypeNode) {
+        isList = true;
+      },
       NamedType(node: NamedTypeNode) {
         namedTypeNode = node;
       }
     });
+    if (isList) {
+      // TODO: This is not a name.value but a custom type that might confuse future programmers
+      return "ListNode";
+    }
     if (namedTypeNode) {
       // TODO: Handle this for object types/ enums/ custom scalars
       return (namedTypeNode as NamedTypeNode).name.value as GraphQLScalarType;
@@ -45,6 +54,12 @@ export class SourceHelper {
     if (type === "String") {
       return value;
     }
+
+    // TODO: Does this note need to have an impact?
+    // NOTE:
+    // -- We don't do anything for non-nulls - the backend will throw a meaninful error
+    // -- We treat custom types and lists similarly - as JSON - tedious for user to provide JSON but it works
+    // -- We treat enums as string and that fits
 
     // Object type
     try {
