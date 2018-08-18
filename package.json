@@ -1,5 +1,7 @@
 {
   "name": "vscode-graphql",
+  "version": "0.1.4",
+  "preview": true,
   "private": false,
   "license": "MIT",
   "displayName": "GraphQL",
@@ -17,7 +19,6 @@
     "color": "#032539",
     "theme": "dark"
   },
-  "version": "0.1.4",
   "publisher": "Prisma",
   "engines": {
     "vscode": "^1.25.0"
