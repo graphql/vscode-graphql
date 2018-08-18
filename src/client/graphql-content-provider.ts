@@ -30,9 +30,12 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
 
   private html: string = ""; // HTML document buffer
 
+  timeout = ms => new Promise(res => setTimeout(res, ms));
+
   async getVariablesFromUser(
     variableDefinitionNodes: VariableDefinitionNode[]
   ): Promise<{ [key: string]: GraphQLScalarTSType }> {
+    await this.timeout(500);
     let variables = {};
     for (let node of variableDefinitionNodes) {
       variables = {
