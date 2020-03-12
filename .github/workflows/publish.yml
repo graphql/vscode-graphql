@@ -8,6 +8,8 @@ on:
 
 env:
   PAT: ${{ secrets.PAT }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  PRODUCTION: ${{ secrets.PRODUCTION }}
 
 jobs:
   publish:

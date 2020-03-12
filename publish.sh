@@ -19,7 +19,7 @@ fi
 if [ "$PRODUCTION" = "1" ]; then
     git config --global user.email "prismabots@gmail.com"
     git config --global user.name "Prismo"
-    git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git" || true
+    git remote add github "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git" || true
     git pull github "${GITHUB_REF}" --ff-only
     git push github HEAD:"${GITHUB_REF}"
 else
