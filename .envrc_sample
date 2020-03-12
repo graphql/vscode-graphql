@@ -1,2 +1,2 @@
-LOCAL=<true> # Do not set to actually execute the command, using "false" does not work
+PRODUCTION=<1> # Default to dry-run, to actually publish, use PRODUCTION=1
 PAT=<Personal Access Token> # https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token
