@@ -1,7 +1,6 @@
 #!/bin/bash
 
-if [ ! -f .envrc ]
-then
+if [[ ! -f .envrc ]]; then
   export $(cat .envrc | xargs)
 fi
 
