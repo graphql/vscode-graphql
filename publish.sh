@@ -8,7 +8,7 @@ echo "============================"
 if [ -z "$PAT" ]; then
     echo "\$PAT is empty. Please set the value of $PAT"
 elif [ -n "$PAT" ]; then
-    if [ "$PRODUCTION" == "1" ]; then
+    if [ "$PRODUCTION" = "1" ]; then
         ./node_modules/.bin/vsce publish patch --pat $PAT
     else
         echo "Printing the command because PRODUCTION is not set"
@@ -16,7 +16,7 @@ elif [ -n "$PAT" ]; then
     fi
 fi
 
-if [ "$PRODUCTION" == "1" ]; then
+if [ "$PRODUCTION" = "1" ]; then
     git config --global user.email "prismabots@gmail.com"
     git config --global user.name "Prismo"
     git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git" || true
