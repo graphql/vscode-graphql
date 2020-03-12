@@ -11,8 +11,7 @@ echo "LOCAL: $LOCAL"
 if [[ -z "$PAT" ]]; then
     echo "\$PAT is empty. Please set the value of $PAT"
 else
-    if [[ -z "$LOCAL" ]];
- then
+    if [[ -z "$LOCAL" ]]; then
         echo "Printing the command because LOCAL is set"
         echo "npm run vsce:publish patch --pat $PAT"
     else
