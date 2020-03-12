@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - feat_automate_release
 
 env:
   PAT: ${{ secrets.PAT }}
