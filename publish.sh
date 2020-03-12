@@ -8,11 +8,11 @@ fi
 echo "PAT: $PAT"
 echo "LOCAL: $LOCAL"
 
-if [ -z "$PAT" ]
+if [[ -z "$PAT" ]];
 then
     echo "\$PAT is empty. Please set the value of $PAT"
 else
-    if [ -z "$LOCAL" ]
+    if [[ -z "$LOCAL" ]];
     then
         echo "Printing the command because LOCAL is set"
         echo "npm run vsce:publish patch --pat $PAT"
@@ -24,7 +24,7 @@ fi
 echo "PAT: $PAT"
 echo "LOCAL: $LOCAL"
 
-if [ -z "$LOCAL" ]
+if [[ -z "$LOCAL" ]];
 then
     echo "Not pushing because LOCAL is set"
 else
