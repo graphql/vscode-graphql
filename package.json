@@ -146,7 +146,7 @@
     "apollo-link-http": "1.5.16",
     "apollo-link-ws": "1.0.19",
     "babel-polyfill": "6.26.0",
-    "capitalize": "1.0.0",
+    "capitalize": "2.0.3",
     "dotenv": "6.2.0",
     "graphql": "0.13.x",
     "graphql-config": "2.2.1",
