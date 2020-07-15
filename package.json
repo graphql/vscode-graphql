@@ -106,12 +106,12 @@
         "title": "VSCode GraphQL - Is Debugging?"
       },
       {
-        "command": "extension.contentProvider",
-        "title": "Execute GraphQL Operations"
-      },
-      {
         "command": "extension.restart",
         "title": "VSCode GraphQL - Restart"
+      },
+      {
+        "command": "extension.contentProvider",
+        "title": "Execute GraphQL Operations"
       }
     ],
     "typescriptServerPlugins": [
