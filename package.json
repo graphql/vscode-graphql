@@ -33,9 +33,9 @@
     "onCommand:extension.isDebugging",
     "onCommand:extension.contentProvider",
     "onLanguage:graphql",
-    "workspaceContains:**/.graphqlconfig",
-    "workspaceContains:**/.graphqlconfig.yml",
-    "workspaceContains:**/.graphqlconfig.yaml"
+    "workspaceContains:**/.graphqlrc",
+    "workspaceContains:**/.graphqlrc.{json,yaml,yml,js}",
+    "workspaceContains:**/graphql.config.{json,yaml,yml,js}"
   ],
   "main": "./out/extension",
   "contributes": {
@@ -109,11 +109,6 @@
         "command": "extension.contentProvider",
         "title": "Execute GraphQL Operations"
       }
-    ],
-    "typescriptServerPlugins": [
-      {
-        "name": "@divyenduz/ts-graphql-plugin"
-      }
     ]
   },
   "scripts": {
@@ -140,19 +135,19 @@
     "vscode": "1.1.36"
   },
   "dependencies": {
-    "@divyenduz/ts-graphql-plugin": "0.1.0",
-    "apollo-cache-inmemory": "1.6.5",
-    "apollo-client": "2.6.8",
-    "apollo-link": "1.2.13",
-    "apollo-link-http": "1.5.16",
-    "apollo-link-ws": "1.0.19",
+    "apollo-cache-inmemory": "1.6.6",
+    "apollo-client": "2.6.10",
+    "apollo-link": "1.2.14",
+    "apollo-link-error": "^1.1.13",
+    "apollo-link-http": "1.5.17",
+    "apollo-link-ws": "1.0.20",
     "babel-polyfill": "6.26.0",
     "capitalize": "1.0.0",
     "dotenv": "6.2.0",
-    "graphql": "15.0.x",
-    "graphql-config": "2.2.2",
+    "graphql": "^15.0.0",
+    "graphql-config": "^3.0.3",
     "graphql-config-extension-prisma": "0.3.0",
-    "graphql-language-service-server": "2.3.3",
+    "graphql-language-service-server": "^2.4.0",
     "graphql-tag": "^2.10.3",
     "subscriptions-transport-ws": "0.9.16",
     "vscode-languageclient": "5.2.1",
