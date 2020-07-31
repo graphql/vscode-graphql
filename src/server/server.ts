@@ -1,13 +1,15 @@
 import "babel-polyfill"
 import { startServer } from "graphql-language-service-server"
 // import { patchConfig } from "graphql-config-extension-prisma"
-;(async () => {
-  try {
-    await startServer({
-      method: "node",
-      // extensions: [patchConfig]
+
+const start = () => {
+  startServer({
+    method: "node",
+  })
+    .then(() => {})
+    .catch(err => {
+      console.error(err)
     })
-  } catch (err) {
-    console.error(err)
-  }
-})()
+}
+
+start()

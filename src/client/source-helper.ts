@@ -71,9 +71,16 @@ export class SourceHelper {
         }
       }
       if (type === "String") {
-        if (typeof value === "string") {
+        if (value.length && !Array.isArray(value)) {
           return null
         }
+      } else {
+        try {
+          const result = JSON.parse(value)
+          if (result) {
+            return null
+          }
+        } catch (err) {}
       }
     } catch {
       return `${value} is not a valid ${type}`

@@ -97,6 +97,18 @@
           ],
           "default": "off",
           "description": "Enable tracing for language server"
+        },
+        "vscode-graphql.config.baseDir": {
+          "type": [
+            "string"
+          ],
+          "description": "Base dir for graphql config loadConfig()"
+        },
+        "vscode-graphql.config.filePath": {
+          "type": [
+            "string"
+          ],
+          "description": "filePath for graphlq config loadConfig()"
         }
       }
     },

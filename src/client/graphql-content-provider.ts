@@ -11,11 +11,12 @@ import {
   WorkspaceFolder,
 } from "vscode"
 
-import { ExtractedTemplateLiteral } from "./source-helper"
+import type { ExtractedTemplateLiteral } from "./source-helper"
 import { loadConfig, GraphQLProjectConfig } from "graphql-config"
 import { visit, VariableDefinitionNode } from "graphql"
-import { NetworkHelper } from "./network-helper"
+import { NetworkHelper, Endpoint } from "./network-helper"
 import { SourceHelper, GraphQLScalarTSType } from "./source-helper"
+import type { Endpoints } from "graphql-config/extensions/endpoints"
 
 export type UserVariables = { [key: string]: GraphQLScalarTSType }
 
@@ -116,19 +117,21 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
       })
   }
   validUrlFromSchema(pathOrUrl: string) {
-    return pathOrUrl.startsWith("http")
+    return Boolean(pathOrUrl.match(/^https?:\/\//g))
   }
-  async loadEndpoint(projectConfig?: GraphQLProjectConfig) {
+  async loadEndpoint(
+    projectConfig?: GraphQLProjectConfig,
+  ): Promise<Endpoint | null> {
     // I dont think this is needed in 3.0 any more.
     // if (config && !projectConfig) {
     //   projectConfig = this.patchProjectConfig(config) as GraphQLProjectConfig
     // }
-    let endpoints = projectConfig?.extensions?.endpoints
+    let endpoints: Endpoints = projectConfig?.extensions?.endpoints
 
     if (!endpoints) {
       endpoints = {
-        default: {},
-      }
+        default: { url: "" },
+      } as Endpoints
 
       this.update(this.uri)
       this.updatePanel()
@@ -140,7 +143,7 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
         if (schema && Array.isArray(schema)) {
           schema.map(s => {
             if (this.validUrlFromSchema(s as string)) {
-              endpoints.default.url = s.toString()
+              endpoints!.default.url = s.toString()
             }
           })
         } else if (schema && this.validUrlFromSchema(schema as string)) {
@@ -152,7 +155,7 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
           "Warning: No Endpoints configured. Config schema contains no URLs"
         this.update(this.uri)
         this.updatePanel()
-        return
+        return null
       } else {
         this.outputChannel.appendLine(
           `Warning: No Endpoints configured. Attempting to execute operation with 'config.schema' value '${endpoints.default.url}'`,
@@ -169,10 +172,10 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
         "Error: endpoint data missing from graphql config endpoints extension"
       this.update(this.uri)
       this.updatePanel()
-      return
+      return null
     }
     const endpointName = await this.getEndpointName(endpointNames)
-    return endpoints[endpointName]
+    return endpoints[endpointName] || endpoints.default
   }
   async loadProvider() {
     try {
@@ -193,47 +196,48 @@ export class GraphQLContentProvider implements TextDocumentContentProvider {
         }
 
         const endpoint = await this.loadEndpoint(projectConfig)
-        let variableDefinitionNodes: VariableDefinitionNode[] = []
-        visit(this.literal.ast, {
-          VariableDefinition(node: VariableDefinitionNode) {
-            variableDefinitionNodes.push(node)
-          },
-        })
+        if (endpoint) {
+          let variableDefinitionNodes: VariableDefinitionNode[] = []
+          visit(this.literal.ast, {
+            VariableDefinition(node: VariableDefinitionNode) {
+              variableDefinitionNodes.push(node)
+            },
+          })
 
-        const updateCallback = (data: string, operation: string) => {
-          if (operation === "subscription") {
-            this.html = `<pre>${data}</pre>` + this.html
-          } else {
-            this.html += `<pre>${data}</pre>`
+          const updateCallback = (data: string, operation: string) => {
+            if (operation === "subscription") {
+              this.html = `<pre>${data}</pre>` + this.html
+            } else {
+              this.html += `<pre>${data}</pre>`
+            }
+            this.update(this.uri)
+            this.updatePanel()
           }
-          this.update(this.uri)
-          this.updatePanel()
-        }
 
-        if (variableDefinitionNodes.length > 0) {
-          const variables = await this.getVariablesFromUser(
-            variableDefinitionNodes,
-          )
+          if (variableDefinitionNodes.length > 0) {
+            const variables = await this.getVariablesFromUser(
+              variableDefinitionNodes,
+            )
 
-          await this.networkHelper.executeOperation({
-            endpoint,
-            literal: this.literal,
-            variables,
-            updateCallback,
-            projectConfig,
-          })
-        } else {
-          await this.networkHelper.executeOperation({
-            endpoint,
-            literal: this.literal,
-            variables: {},
-            updateCallback,
-            projectConfig,
-          })
+            await this.networkHelper.executeOperation({
+              endpoint,
+              literal: this.literal,
+              variables,
+              updateCallback,
+              projectConfig,
+            })
+          } else {
+            await this.networkHelper.executeOperation({
+              endpoint,
+              literal: this.literal,
+              variables: {},
+              updateCallback,
+              projectConfig,
+            })
+          }
         }
       }
     } catch (err) {
-      console.error(err, Object.keys(err))
       if (err.networkError) {
         this.html += err.networkError
       }

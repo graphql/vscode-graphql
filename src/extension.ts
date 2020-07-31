@@ -30,27 +30,6 @@ function getConfig() {
     window.activeTextEditor ? window.activeTextEditor.document.uri : null,
   )
 }
-// we dont need this now that we have common js config files
-// if people want template replacement, that's the way
-//
-// function getEnvironment() {
-//   if (workspace.workspaceFolders === undefined) {
-//     return process.env
-//   }
-
-//   let workspaceEnv = {}
-//   workspace.workspaceFolders.forEach(folder => {
-//     const envPath = `${folder.uri.fsPath}/.env`
-//     if (fs.existsSync(envPath)) {
-//       workspaceEnv = {
-//         ...workspaceEnv,
-//         ...dotenv.parse(fs.readFileSync(envPath)),
-//       }
-//     }
-//   })
-
-//   return { ...workspaceEnv, ...process.env }
-// }
 
 export async function activate(context: ExtensionContext) {
   let outputChannel: OutputChannel = window.createOutputChannel(
@@ -58,6 +37,7 @@ export async function activate(context: ExtensionContext) {
   )
   const config = getConfig()
   const { debug } = config
+
   if (debug) {
     console.log('Extension "vscode-graphql" is now active!')
   }
