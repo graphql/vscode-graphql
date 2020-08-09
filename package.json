@@ -1,6 +1,6 @@
 {
   "name": "vscode-graphql",
-  "version": "0.2.27",
+  "version": "0.2.29",
   "preview": true,
   "private": false,
   "license": "MIT",
@@ -116,6 +116,10 @@
       {
         "command": "extension.isDebugging",
         "title": "VSCode GraphQL - Is Debugging?"
+      },
+      {
+        "command": "extension.restart",
+        "title": "VSCode GraphQL - Restart"
       },
       {
         "command": "extension.contentProvider",
