@@ -163,7 +163,7 @@
     "graphql": "^15.0.0",
     "graphql-config": "^3.0.3",
     "graphql-config-extension-prisma": "0.3.0",
-    "graphql-language-service-server": "^2.4.0",
+    "graphql-language-service-server": "^2.5.0-alpha.0",
     "graphql-tag": "^2.10.3",
     "subscriptions-transport-ws": "0.9.16",
     "vscode-languageclient": "5.2.1",
