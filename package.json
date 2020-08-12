@@ -1,6 +1,6 @@
 {
-  "name": "graphql-vscode",
-  "version": "0.3.0",
+  "name": "vscode-graphql",
+  "version": "0.2.35",
   "preview": true,
   "private": false,
   "license": "MIT",
@@ -169,6 +169,10 @@
     "graphql-tag": "^2.11.0",
     "node-fetch": "^2.6.0",
     "subscriptions-transport-ws": "^0.9.17",
+    "vsce": "1.75.0",
+    "vscode": "1.1.36",
+    "ovsx": "0.1.0-next.dacd2fd",
+    "@divyenduz/ts-graphql-plugin": "0.1.0",
     "vscode-languageclient": "5.2.1",
     "ws": "^7.2.3"
   }
