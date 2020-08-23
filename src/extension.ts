@@ -77,6 +77,7 @@ export async function activate(context: ExtensionContext) {
     },
     outputChannel: outputChannel,
     outputChannelName: "GraphQL Language Server",
+    revealOutputChannelOn: 4,
     initializationFailedHandler: CustomInitializationFailedHandler(
       outputChannel,
     ),

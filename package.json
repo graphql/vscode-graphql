@@ -101,17 +101,39 @@
           "default": "off",
           "description": "Enable tracing for language server"
         },
-        "vscode-graphql.config.baseDir": {
+        "vscode-graphql.showExecCodelens": {
           "type": [
-            "string"
+            "boolean"
           ],
-          "description": "Base dir for graphql config loadConfig()"
+          "description": "Show codelens to execute operations inline"
         },
-        "vscode-graphql.config.filePath": {
+        "graphql-config.load.baseDir": {
           "type": [
             "string"
           ],
-          "description": "filePath for graphlq config loadConfig()"
+          "description": "Base dir for graphql config loadConfig()",
+          "default": null
+        },
+        "graphql-config.load.filePath": {
+          "type": [
+            "string"
+          ],
+          "description": "filePath for graphql config loadConfig()",
+          "default": null
+        },
+        "graphql-config.load.legacy": {
+          "type": [
+            "boolean"
+          ],
+          "description": "legacy mode for graphql config v2 config",
+          "default": null
+        },
+        "graphql-config.load.configName": {
+          "type": [
+            "string"
+          ],
+          "description": "optional <configName>.config.js instead of default `graphql`",
+          "default": null
         }
       }
     },
