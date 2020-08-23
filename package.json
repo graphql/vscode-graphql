@@ -105,9 +105,10 @@
           "type": [
             "boolean"
           ],
-          "description": "Show codelens to execute operations inline"
+          "description": "Show codelens to execute operations inline",
+          "default": true
         },
-        "graphql-config.load.baseDir": {
+        "graphql-config.load.rootDir": {
           "type": [
             "string"
           ],

@@ -108,18 +108,33 @@ export async function activate(context: ExtensionContext) {
     initStatusBar(statusBarItem, client, window.activeTextEditor)
   })
 
-  context.subscriptions.push(
-    languages.registerCodeLensProvider(
-      [
-        "javascript",
-        "typescript",
-        "javascriptreact",
-        "typescriptreact",
-        "graphql",
-      ],
-      new GraphQLCodeLensProvider(outputChannel),
-    ),
-  )
+  const settings = workspace.getConfiguration("vscode-graphql")
+
+  const registerCodeLens = () => {
+    context.subscriptions.push(
+      languages.registerCodeLensProvider(
+        [
+          "javascript",
+          "typescript",
+          "javascriptreact",
+          "typescriptreact",
+          "graphql",
+        ],
+        new GraphQLCodeLensProvider(outputChannel),
+      ),
+    )
+  }
+
+  if (settings.showExecCodelens) {
+    registerCodeLens()
+  }
+
+  workspace.onDidChangeConfiguration(() => {
+    const newSettings = workspace.getConfiguration("vscode-graphql")
+    if (newSettings.showExecCodeLens) {
+      registerCodeLens()
+    }
+  })
 
   const commandContentProvider = commands.registerCommand(
     "extension.contentProvider",
