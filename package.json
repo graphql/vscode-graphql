@@ -1,17 +1,17 @@
 {
-  "name": "graphql-vscode-insiders",
+  "name": "vscode-graphql",
   "version": "0.3.5",
   "preview": true,
   "private": false,
   "license": "MIT",
-  "displayName": "GraphQL Insiders",
+  "displayName": "GraphQL",
   "keywords": [
     "multi-root ready",
     "graphql",
     "lsp",
     "graph"
   ],
-  "description": "(insiders edition for testing) GraphQL extension for VSCode adds syntax highlighting, validation, and language features like go to definition, hover information and autocompletion for graphql projects. This extension also works with queries annotated with gql tag.",
+  "description": "GraphQL extension for VSCode adds syntax highlighting, validation, and language features like go to definition, hover information and autocompletion for graphql projects. This extension also works with queries annotated with gql tag.",
   "icon": "assets/images/logo.png",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "color": "#032539",
     "theme": "dark"
   },
-  "publisher": "GraphQL",
+  "publisher": "Prisma",
   "engines": {
     "vscode": "^1.32.0"
   },
@@ -189,7 +189,7 @@
     "dotenv": "^8.2.0",
     "graphql": "^15.3.0",
     "graphql-config": "^3.0.3",
-    "graphql-language-service-server": "^2.5.0-alpha.2",
+    "graphql-language-service-server": "^2.5.0-alpha.4",
     "graphql-tag": "^2.11.0",
     "node-fetch": "^2.6.0",
     "ovsx": "0.1.0-next.dacd2fd",
