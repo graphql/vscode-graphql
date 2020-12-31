@@ -39,6 +39,11 @@ export async function activate(context: ExtensionContext) {
   const config = getConfig()
   const { debug } = config
 
+  // Set cwd to workspace so .env files load properly
+  if (workspace.workspaceFolders) {
+    process.chdir(workspace.workspaceFolders[0].uri.fsPath)
+  }
+
   if (debug) {
     console.log('Extension "vscode-graphql" is now active!')
   }
