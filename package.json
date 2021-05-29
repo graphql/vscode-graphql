@@ -239,7 +239,7 @@
     "ovsx": "0.1.0-next.dacd2fd",
     "subscriptions-transport-ws": "^0.9.17",
     "vscode-languageclient": "5.2.1",
-    "ws": "^7.3.1"
+    "ws": "^7.4.6"
   },
   "resolutions": {
     "graphql": "^15.3.0",
