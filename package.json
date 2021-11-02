@@ -1,6 +1,6 @@
 {
   "name": "vscode-graphql",
-  "version": "0.3.18",
+  "version": "0.3.19",
   "preview": true,
   "private": false,
   "license": "MIT",
@@ -241,7 +241,7 @@
     "dotenv": "^8.2.0",
     "graphql": "^15.4.0",
     "graphql-config": "^3.2.0",
-    "graphql-language-service-server": "^2.5.6",
+    "graphql-language-service-server": "^2.7.1",
     "graphql-tag": "^2.11.0",
     "node-fetch": "^2.6.0",
     "ovsx": "0.1.0-next.dacd2fd",

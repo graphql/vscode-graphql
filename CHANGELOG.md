@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 The git log should show a fairly clean view of each of these new versions, and the issues/PRs associated.
 
+# 0.3.19
+
+- bump `graphql-language-service-server` to fix converting file url to path on windows
+
 # 0.3.13
 
 LSP bugfixes:
