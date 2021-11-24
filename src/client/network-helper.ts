@@ -20,8 +20,8 @@ import {
   SourceHelper,
   getFragmentDependenciesForAST,
 } from "./source-helper"
-import { UserVariables } from "./graphql-content-provider"
 
+import { UserVariables } from "./graphql-content-provider"
 export class NetworkHelper {
   private outputChannel: OutputChannel
   private sourceHelper: SourceHelper
@@ -39,11 +39,6 @@ export class NetworkHelper {
     endpoint: Endpoint
     updateCallback: (data: string, operation: string) => void
   }) {
-    const { rejectUnauthorized } = workspace.getConfiguration("vscode-graphql")
-    // this is a node specific setting that can allow requests against servers using self-signed certificates
-    // it is similar to passing the nodejs env variable flag, except configured on a per-request basis here
-    const agent = new Agent({ rejectUnauthorized })
-
     const wsEndpointURL = endpoint.url.replace(/^http/, "ws")
     const wsClient = createWSClient({
       url: wsEndpointURL,
@@ -51,9 +46,13 @@ export class NetworkHelper {
       webSocketImpl: ws,
     })
 
+    const { rejectUnauthorized } = workspace.getConfiguration("vscode-graphql")
+    // this is a node specific setting that can allow requests against servers using self-signed certificates
+    // it is similar to passing the nodejs env variable flag, except configured on a per-request basis here
+    const agent = new Agent({ rejectUnauthorized })
+
     return createClient({
       url: endpoint.url,
-      // @ts-expect-error
       fetch,
       fetchOptions: {
         headers: endpoint.headers as HeadersInit,

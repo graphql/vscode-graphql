@@ -37,8 +37,9 @@
     "onCommand:vscode-graphql.contentProvider",
     "onLanguage:graphql",
     "workspaceContains:**/.graphqlrc",
-    "workspaceContains:**/.graphqlrc.{json,yaml,yml,js}",
-    "workspaceContains:**/graphql.config.{json,yaml,yml,js}"
+    "workspaceContains:**/.graphqlrc.{json,yaml,yml,js,ts,toml}",
+    "workspaceContains:**/graphql.config.{json,yaml,yml,js,ts,toml}",
+    "*"
   ],
   "main": "./out/extension",
   "contributes": {
@@ -239,10 +240,10 @@
     "dotenv": "^10.0.0",
     "graphql": "^16.0.1",
     "graphql-config": "~4.1.0",
-    "graphql-language-service-server": "^2.7.1",
+    "graphql-language-service-server": "^2.7.3",
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^5.5.5",
-    "node-fetch": "^3.1.0",
+    "node-fetch": "^2.6.6",
     "urql": "^2.0.5",
     "vscode-languageclient": "^5.2.1",
     "ws": "^8.2.3"
