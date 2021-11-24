@@ -208,9 +208,10 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile -- --minify",
-    "compile": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --external:react --format=cjs --platform=node",
+    "compile": "npm run compile:server && esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --external:react --format=cjs --platform=node",
+    "compile:server": "esbuild ./src/server/server.ts --bundle --outfile=out/server/server.js --external:vscode --external:react --format=cjs --platform=node",
     "build": "npm run compile -- --sourcemap",
-    "watch": "npm run compile -- --sourcemap --watch",
+    "watch": "npm run build --watch",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
     "vsce:package": "vsce package",
