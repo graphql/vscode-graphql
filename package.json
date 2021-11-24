@@ -207,9 +207,10 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile -- --minify",
+    "compile": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --external:react --format=cjs --platform=node",
+    "build": "npm run compile -- --sourcemap",
+    "watch": "npm run compile -- --sourcemap --watch",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
     "vsce:package": "vsce package",
@@ -225,10 +226,11 @@
     "@types/node-fetch": "^3.0.3",
     "@types/vscode": "^1.62.0",
     "@types/ws": "8.2.0",
+    "esbuild": "^0.13.15",
     "ovsx": "0.2.1",
     "tslint": "5.20.1",
     "typescript": "4.4.4",
-    "vsce": "^1.78.0",
+    "vsce": "^2.5.0",
     "vscode": "^1.1.37"
   },
   "dependencies": {
