@@ -238,7 +238,7 @@
     "babel-polyfill": "6.26.0",
     "capitalize": "^2.0.4",
     "dotenv": "^10.0.0",
-    "graphql": "^16.0.1",
+    "graphql": "^15",
     "graphql-config": "~4.1.0",
     "graphql-language-service-server": "^2.7.3",
     "graphql-tag": "^2.12.6",
