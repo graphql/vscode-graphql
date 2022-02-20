@@ -248,7 +248,7 @@
     "@urql/core": "2.3.6",
     "babel-polyfill": "6.26.0",
     "capitalize": "2.0.4",
-    "dotenv": "10.0.0",
+    "dotenv": "16.0.0",
     "escape-html": "1.0.3",
     "graphql": "15.8.0",
     "graphql-config": "4.1.0",
