@@ -49,7 +49,7 @@ Install the [VSCode GraphQL Extension](https://marketplace.visualstudio.com/item
 
 **This extension requires a graphql-config file**.
 
-As of `vscode-graphql@0.3.0` we support `graphql-config@3`. You can read more about that [here](https://graphql-config.com/usage). Because it now uses `cosmicconfig` there are plenty of new options for loading config files:
+As of `vscode-graphql@0.3.0` we support `graphql-config@3`. You can read more about that [here](https://www.graphql-config.com/docs/user/user-usage). Because it now uses `cosmicconfig` there are plenty of new options for loading config files:
 
 ```
 graphql.config.json
