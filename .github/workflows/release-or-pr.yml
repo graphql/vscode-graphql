@@ -1,11 +1,9 @@
 name: Release
 
 on:
-  workflow_run:
-    workflows: ["automatic-release"]
-    branches: [master]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
   release:
