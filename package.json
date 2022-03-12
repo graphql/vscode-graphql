@@ -231,7 +231,7 @@
     "@types/node": "16.11.26",
     "@types/node-fetch": "3.0.3",
     "@types/vscode": "1.62.0",
-    "@types/ws": "8.2.2",
+    "@types/ws": "8.5.3",
     "esbuild": "0.13.15",
     "ovsx": "0.3.0",
     "tslint": "5.20.1",
@@ -257,7 +257,7 @@
     "graphql-ws": "5.5.5",
     "node-fetch": "2.6.7",
     "vscode-languageclient": "5.2.1",
-    "ws": "8.2.3"
+    "ws": "8.5.0"
   },
   "resolutions": {
     "graphql-config": "4.1.0"
