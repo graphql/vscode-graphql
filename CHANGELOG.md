@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.3.52
+
+### Patch Changes
+
+- [#452](https://github.com/graphql/vscode-graphql/pull/452) [`8878e42`](https://github.com/graphql/vscode-graphql/commit/8878e428c83eed4f53510f9071e9964f48b5d214) Thanks [@acao](https://github.com/acao)! - Limit activation events for package.json file provided `graphql-config`
+
 ## 0.3.50
 
 ### Patch Changes
