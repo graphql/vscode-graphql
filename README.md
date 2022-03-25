@@ -237,7 +237,7 @@ Good news, we have configs for this now!
 You can search a folder for any of the matching config file names listed above:
 
 ```json
-"graphql-config.load.baseDir": "./config"
+"graphql-config.load.rootDir": "./config"
 ```
 
 Or a specific filepath:
@@ -249,7 +249,7 @@ Or a specific filepath:
 Or a different `configName` that allows different formats:
 
 ```json
-"graphql-config.load.baseDir": "./config",
+"graphql-config.load.rootDir": "./config",
 "graphql-config.load.configName": "acme"
 ```
 
