@@ -274,7 +274,7 @@ or
 
 ```ts
   const myQuery =
-  /* GraphiQL / 
+  /* GraphiQL */ 
 `
   query {
     something
