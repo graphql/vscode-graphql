@@ -230,7 +230,7 @@
     "@types/mocha": "5.2.7",
     "@types/node": "16.11.26",
     "@types/node-fetch": "3.0.3",
-    "@types/vscode": "1.62.0",
+    "@types/vscode": "1.66.0",
     "@types/ws": "8.2.2",
     "esbuild": "0.13.15",
     "ovsx": "0.3.0",
