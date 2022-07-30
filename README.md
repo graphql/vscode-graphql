@@ -1,8 +1,9 @@
-# VSCode GraphQL
+# VSCode GraphQL [ARCHIVED]
 
-> *ARCHIVED* The extension has been moved to [`graphql/graphiql` monorepo](https://github.com/graphql/graphiql/tree/main/packages/vscode-graphql) - please open all new tickets and PRs there. Operation execution support has been dropped, so please use another extension like [graphql notebooks](https://github.com/joyceerhl/vscode-github-graphql-notebooks/issues/7#issuecomment-1086962711) for in-vscode execution.
+> The extension has been moved to [`graphql/graphiql` monorepo](https://github.com/graphql/graphiql/tree/main/packages/vscode-graphql) - please open all new tickets and PRs there. Operation execution support was temporarily dropped and is planned to be replaced before 2023. 
+Another useful operation exection extension that works inline is [vscode-graphiql-explorer](https://marketplace.visualstudio.com/items?itemName=GabrielNordeborn.vscode-graphiql-explorer). Another handy extension - [graphql notebooks](https://github.com/joyceerhl/vscode-github-graphql-notebooks/issues/7#issuecomment-1086962711) provides a UX where you can keep graphql "notebooks" using the vscode notebooks API.
 
-GraphQL extension VSCode built with the aim to tightly integrate the GraphQL Ecosystem with VSCode for an awesome developer experience.
+GraphQL extension for VSCode was built with the aim to tightly integrate the GraphQL Ecosystem with VSCode for an awesome developer experience.
 
 ![](https://camo.githubusercontent.com/97dc1080d5e6883c4eec3eaa6b7d0f29802e6b4b/687474703a2f2f672e7265636f726469742e636f2f497379504655484e5a342e676966)
 
