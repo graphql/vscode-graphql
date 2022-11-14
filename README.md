@@ -7,8 +7,6 @@ GraphQL extension for VSCode was built with the aim to tightly integrate the Gra
 
 ![](https://camo.githubusercontent.com/97dc1080d5e6883c4eec3eaa6b7d0f29802e6b4b/687474703a2f2f672e7265636f726469742e636f2f497379504655484e5a342e676966)
 
-> 💡 **Note:** This extension no longer supports `.prisma` files. If you are using this extension with GraphQL 1, please rename your datamodel from `datamodel.prisma` to `datamodel.graphql` and this extension will pick that up.
-
 ## Features
 
 Lots of new improvements happening! We now have a [`CHANGELOG.md`](https://github.com/graphql/vscode-graphql/blob/master/CHANGELOG.md#change-log)
